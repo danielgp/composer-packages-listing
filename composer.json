@@ -15,7 +15,7 @@
     },
     "autoload": {
         "classmap": [
-            "source/ComposerPackagesListing.php"
+            "ComposerPackagesListing.php"
         ]
     },
     "minimum-stability": "stable",
