@@ -13,6 +13,11 @@
     "require": {
         "php": "~5.5|~7.0"
     },
+    "autoload": {
+        "classmap": [
+            "source/ComposerPackagesListing.php"
+        ]
+    },
     "minimum-stability": "stable",
     "prefer-stable": true,
     "archive": {
