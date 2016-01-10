@@ -53,7 +53,7 @@ trait ComposerPackagesListing
         foreach ($packages['packages'] as $value) {
             $basic                 = $this->getPkgBasicInfo($value, $dNA);
             $atr                   = $this->getPkgOptAtributeAll($value, $dNA);
-            $alnfo[$value['name']] = array_merge($basic, $atr);
+            $alnfo[$value['name']] = array_merge($basic, $atr, $this->getPkgTiming($value, $dNA));
             ksort($alnfo[$value['name']]);
         }
         ksort($alnfo);
@@ -71,14 +71,11 @@ trait ComposerPackagesListing
     private function getPkgBasicInfo($value, $defaultNA)
     {
         return [
-            'Aging'            => (isset($value['time']) ? $this->getPkgAging($value['time']) : $defaultNA),
             'License'          => (isset($value['license']) ? $this->getPkgLcns($value['license']) : $defaultNA),
             'Notification URL' => (isset($value['version']) ? $value['notification-url'] : $defaultNA),
             'Package Name'     => $value['name'],
             'PHP required'     => (isset($value['require']['php']) ? $value['require']['php'] : $defaultNA),
             'Product'          => explode('/', $value['name'])[1],
-            'Time'             => (isset($value['time']) ? date('l, d F Y H:i:s', strtotime($value['time'])) : ''),
-            'Time as PHP no.'  => (isset($value['time']) ? strtotime($value['time']) : ''),
             'Vendor'           => explode('/', $value['name'])[0],
             'Version no.'      => (isset($value['version']) ? $this->getPkgVerNo($value['version']) : $defaultNA),
         ];
@@ -112,6 +109,18 @@ trait ComposerPackagesListing
             }
         }
         return $aReturn;
+    }
+
+    private function getPkgTiming($value, $defaultNA)
+    {
+        if (isset($value['time'])) {
+            return [
+                'Aging'           => $this->getPkgAging($value['time']),
+                'Time'            => date('l, d F Y H:i:s', strtotime($value['time'])),
+                'Time as PHP no.' => strtotime($value['time']),
+            ];
+        }
+        return ['Aging' => $defaultNA, 'Time' => $defaultNA, 'Time as PHP no.' => $defaultNA];
     }
 
     private function getPkgVerNo($version)
