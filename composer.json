@@ -1,0 +1,21 @@
+{
+    "name": "danielgp/composer-packages-listing",
+    "description": "Wrapper for the composer.lock files attempting to normalize and enhance content included",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name":     "Daniel Popiniuc",
+            "email":    "danielpopiniuc@gmail.com",
+            "role":     "Developer"
+        }
+    ],
+    "require": {
+        "php": "~5.5"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "archive": {
+        "exclude": ["/nbproject", "/tests"]
+    }
+}
