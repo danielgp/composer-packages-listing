@@ -51,9 +51,10 @@ trait ComposerPackagesListing
         $alnfo    = [];
         $packages = $this->getPkgFileInListOfPackageArrayOut($fileToRead);
         foreach ($packages['packages'] as $value) {
-            $basic                 = $this->getPkgBasicInfo($value, $dNA);
             $atr                   = $this->getPkgOptAtributeAll($value, $dNA);
-            $alnfo[$value['name']] = array_merge($basic, $atr, $this->getPkgTiming($value, $dNA));
+            $basic                 = $this->getPkgBasicInfo($value, $dNA);
+            $vrs                   = $this->getPkgVersion($value, $dNA);
+            $alnfo[$value['name']] = array_merge($atr, $basic, $vrs, $this->getPkgTiming($value, $dNA));
             ksort($alnfo[$value['name']]);
         }
         ksort($alnfo);
@@ -71,13 +72,11 @@ trait ComposerPackagesListing
     private function getPkgBasicInfo($value, $defaultNA)
     {
         return [
-            'License'          => (isset($value['license']) ? $this->getPkgLcns($value['license']) : $defaultNA),
-            'Notification URL' => (isset($value['version']) ? $value['notification-url'] : $defaultNA),
-            'Package Name'     => $value['name'],
-            'PHP required'     => (isset($value['require']['php']) ? $value['require']['php'] : $defaultNA),
-            'Product'          => explode('/', $value['name'])[1],
-            'Vendor'           => explode('/', $value['name'])[0],
-            'Version no.'      => (isset($value['version']) ? $this->getPkgVerNo($value['version']) : $defaultNA),
+            'License'      => (isset($value['license']) ? $this->getPkgLcns($value['license']) : $defaultNA),
+            'Package Name' => $value['name'],
+            'PHP required' => (isset($value['require']['php']) ? $value['require']['php'] : $defaultNA),
+            'Product'      => explode('/', $value['name'])[1],
+            'Vendor'       => explode('/', $value['name'])[0],
         ];
     }
 
@@ -133,5 +132,16 @@ trait ComposerPackagesListing
             $vrs = substr($vrs, 0, strpos($vrs, '-'));
         }
         return $vrs;
+    }
+
+    private function getPkgVersion($value, $defaultNA)
+    {
+        if (isset($value['version'])) {
+            return [
+                'Notification URL' => $value['notification-url'],
+                'Version no.'      => $this->getPkgVerNo($value['version']),
+            ];
+        }
+        return ['Notification URL' => $defaultNA, 'Version no.' => $defaultNA];
     }
 }
