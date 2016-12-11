@@ -1,0 +1,4 @@
+ComposerPackagesListing
+ [ ] Get package details from given composer lock file
+ [x] Get package details from given composer lock file error
+
