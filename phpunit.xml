@@ -22,9 +22,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -->
-<phpunit 
+<phpunit
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/5.4/phpunit.xsd"
+        xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/5.7/phpunit.xsd"
         backupGlobals="true"
         backupStaticAttributes="false"
         bootstrap="tests/php-unit/php-unit--bootstrap.php"
@@ -62,5 +62,5 @@ THE SOFTWARE.
         <log type="junit" target="tests/php-unit/junit.xml" logIncompleteSkipped="false"/>
         <log type="testdox-html" target="tests/php-unit/testdox.html"/>
         <log type="testdox-text" target="tests/php-unit/testdox.txt"/>
-    </logging>  
+    </logging>
 </phpunit>
