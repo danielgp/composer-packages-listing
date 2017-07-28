@@ -1,5 +1,7 @@
 <?php
 
+namespace danielgp\composer_packages_listing;
+
 /**
  *
  * The MIT License (MIT)
@@ -25,18 +27,16 @@
  * SOFTWARE.
  *
  */
-class ComposerPackagesListingTest extends PHPUnit_Framework_TestCase
+class ComposerPackagesListingTest extends \PHPUnit\Framework\TestCase
 {
 
-    use \danielgp\composer_packages_listing\ComposerPackagesListing;
+    use ComposerPackagesListing;
 
     public function testGetPackageDetailsFromGivenComposerLockFile()
     {
-        $pathParts = explode(DIRECTORY_SEPARATOR, __DIR__);
-        $file      = implode(DIRECTORY_SEPARATOR, array_diff($pathParts, ['tests', 'php-unit']))
-                . DIRECTORY_SEPARATOR . 'composer.lock';
-        $actual    = $this->getPackageDetailsFromGivenComposerLockFile($file);
-        $this->assertArrayHasKey('Aging', $actual['gettext/gettext']);
+        $fileToCheck = str_replace('tests' . DIRECTORY_SEPARATOR . 'php-unit', '', realpath(__DIR__)) . 'composer.lock';
+        $actual      = $this->getPackageDetailsFromGivenComposerLockFile($fileToCheck);
+        $this->assertArrayHasKey('Aging', $actual['phpunit/phpunit']);
     }
 
     public function testGetPackageDetailsFromGivenComposerLockFileError()
