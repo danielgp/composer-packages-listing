@@ -35,7 +35,7 @@ class ComposerPackagesListingTest extends \PHPUnit\Framework\TestCase
     public function testGetPackageDetailsFromGivenComposerLockFile()
     {
         $fileToCheck = str_replace('tests' . DIRECTORY_SEPARATOR . 'php-unit', '', realpath(__DIR__)) . 'composer.lock';
-        $actual      = $this->getPackageDetailsFromGivenComposerLockFile($fileToCheck);
+        $actual      = $this->getPackageDetailsFromGivenComposerLockFile($fileToCheck, true);
         $this->assertArrayHasKey('Aging', $actual['phpunit/phpunit']);
     }
 

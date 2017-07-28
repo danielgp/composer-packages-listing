@@ -36,6 +36,26 @@ namespace danielgp\composer_packages_listing;
 trait ComposerPackagesListing
 {
 
+    /**
+     * Decision between Main or Development packages
+     *
+     * @param boolean $devInstead
+     * @return string
+     */
+    private function decisionPackageOrPackageDev($devInstead)
+    {
+        $sReturn = 'packages';
+        if ($devInstead) {
+            $sReturn = 'packages-dev';
+        }
+        return $sReturn;
+    }
+
+    /**
+     * Exposes few Environment details
+     *
+     * @return array
+     */
     protected function exposeEnvironmentDetails()
     {
         $knownValues = [
@@ -104,7 +124,7 @@ trait ComposerPackagesListing
      * @param string $fileToRead
      * @return array
      */
-    protected function getPackageDetailsFromGivenComposerLockFile($fileToRead)
+    protected function getPackageDetailsFromGivenComposerLockFile($fileToRead, $devInstead = false)
     {
         if (!file_exists($fileToRead)) {
             return ['error' => $fileToRead . ' was not found'];
@@ -112,7 +132,7 @@ trait ComposerPackagesListing
         $dNA      = '---';
         $alnfo    = [];
         $packages = $this->getPkgFileInListOfPackageArrayOut($fileToRead);
-        foreach ($packages['packages'] as $value) {
+        foreach ($packages[$this->decisionPackageOrPackageDev($devInstead)] as $value) {
             $atr                   = $this->getPkgOptAtributeAll($value, $dNA);
             $basic                 = $this->getPkgBasicInfo($value, $dNA);
             $vrs                   = $this->getPkgVersion($value, $dNA);
