@@ -36,6 +36,68 @@ namespace danielgp\composer_packages_listing;
 trait ComposerPackagesListing
 {
 
+    protected function exposeEnvironmentDetails()
+    {
+        $knownValues = [
+            'AMD64' => 'x64 (64 bit)',
+            'i386'  => 'x86 (32 bit)',
+            'i586'  => 'x86 (32 bit)',
+        ];
+        return [
+            'Host Name'                     => php_uname('n'),
+            'Machine Type'                  => php_uname('m'),
+            'Operating System Architecture' => $knownValues[php_uname('m')],
+            'Operating System Name'         => php_uname('s'),
+            'Operating System Version'      => php_uname('r') . ' ' . php_uname('v'),
+        ];
+    }
+
+    /**
+     *
+     * @return array
+     */
+    protected function exposePhpDetails()
+    {
+        $packageReleaseTimestamp = $this->getFileModifiedTimestampOfFile(PHP_BINARY);
+        return [
+            'Aging'            => $this->getPkgAging($packageReleaseTimestamp),
+            'Description'      => 'PHP is a popular general-purpose scripting language'
+            . ' that is especially suited to web development',
+            'Homepage'         => 'https://secure.php.net/',
+            'License'          => 'PHP License v3.01',
+            'Notification URL' => '---',
+            'PHP required'     => '---',
+            'Package Name'     => 'ZendEngine/PHP',
+            'Product'          => 'PHP',
+            'Time'             => date('l, d F Y H:i:s', strtotime($packageReleaseTimestamp)),
+            'Time as PHP no.'  => strtotime($packageReleaseTimestamp),
+            'Type'             => 'scripting language',
+            'Url'              => 'https://github.com/php/php-src',
+            'Vendor'           => 'The PHP Group',
+            'Version'          => PHP_VERSION,
+            'Version no.'      => PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION . '.' . PHP_RELEASE_VERSION,
+        ];
+    }
+
+    /**
+     * Returns Modified date and time of a given file
+     *
+     * @param type $fileName
+     * @return string
+     */
+    protected function getFileModifiedTimestampOfFile($fileName, $resultInUtcTimeZone = false)
+    {
+        if (!file_exists($fileName)) {
+            return ['error' => $fileToRead . ' was not found'];
+        }
+        $info    = new \SplFileInfo($fileName);
+        $sResult = date('Y-m-d H:i:s', $info->getMTime());
+        if ($resultInUtcTimeZone) {
+            $sResult = gmdate('Y-m-d H:i:s', $info->getMTime());
+        }
+        return $sResult;
+    }
+
     /**
      * Returns a complete list of packages and respective details from a composer.lock file
      *
