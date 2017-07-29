@@ -78,9 +78,8 @@ trait ComposerPackagesListing
      */
     protected function exposePhpDetails()
     {
-        $packageReleaseTimestamp = $this->getFileModifiedTimestampOfFile(PHP_BINARY);
         return [
-            'Aging'            => $this->getPkgAging($packageReleaseTimestamp),
+            'Aging'            => $this->getPkgAging($this->getFileModifiedTimestampOfFile(PHP_BINARY, 'PHPtime')),
             'Description'      => 'PHP is a popular general-purpose scripting language'
             . ' that is especially suited to web development',
             'Homepage'         => 'https://secure.php.net/',
@@ -89,8 +88,8 @@ trait ComposerPackagesListing
             'PHP required'     => '---',
             'Package Name'     => 'ZendEngine/PHP',
             'Product'          => 'PHP',
-            'Time'             => date('l, d F Y H:i:s', strtotime($packageReleaseTimestamp)),
-            'Time as PHP no.'  => strtotime($packageReleaseTimestamp),
+            'Time'             => $this->getFileModifiedTimestampOfFile(PHP_BINARY, 'l, d F Y H:i:s'),
+            'Time as PHP no.'  => $this->getFileModifiedTimestampOfFile(PHP_BINARY, 'PHPtime'),
             'Type'             => 'scripting language',
             'Url'              => 'https://github.com/php/php-src',
             'Vendor'           => 'The PHP Group',
@@ -102,20 +101,25 @@ trait ComposerPackagesListing
     /**
      * Returns Modified date and time of a given file
      *
-     * @param type $fileName
+     * @param string $fileName
+     * @param string $format
+     * @param boolean $resultInUtc
      * @return string
      */
-    protected function getFileModifiedTimestampOfFile($fileName, $resultInUtcTimeZone = false)
+    protected function getFileModifiedTimestampOfFile($fileName, $format = 'Y-m-d H:i:s', $resultInUtc = false)
     {
         if (!file_exists($fileName)) {
-            return ['error' => $fileToRead . ' was not found'];
+            return ['error' => $fileName . ' was not found'];
         }
-        $info    = new \SplFileInfo($fileName);
-        $sResult = date('Y-m-d H:i:s', $info->getMTime());
-        if ($resultInUtcTimeZone) {
-            $sResult = gmdate('Y-m-d H:i:s', $info->getMTime());
+        $info = new \SplFileInfo($fileName);
+        if ($format === 'PHPtime') {
+            return $info->getMTime();
         }
-        return $sResult;
+        $sReturn = date($format, $info->getMTime());
+        if ($resultInUtc) {
+            $sReturn = gmdate($format, $info->getMTime());
+        }
+        return $sReturn;
     }
 
     /**
