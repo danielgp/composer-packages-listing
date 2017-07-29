@@ -76,26 +76,28 @@ trait ComposerPackagesListing
      *
      * @return array
      */
-    protected function exposePhpDetails()
+    protected function exposePhpDetails($skipAging = false)
     {
-        return [
-            'Aging'            => $this->getPkgAging($this->getFileModifiedTimestampOfFile(PHP_BINARY, 'PHPtime')),
-            'Description'      => 'PHP is a popular general-purpose scripting language'
+        $aReturn = [
+            'Aging'           => $this->getPkgAging($this->getFileModifiedTimestampOfFile(PHP_BINARY, 'PHPtime')),
+            'Description'     => 'PHP is a popular general-purpose scripting language'
             . ' that is especially suited to web development',
-            'Homepage'         => 'https://secure.php.net/',
-            'License'          => 'PHP License v3.01',
-            'Notification URL' => '---',
-            'PHP required'     => '---',
-            'Package Name'     => 'ZendEngine/PHP',
-            'Product'          => 'PHP',
-            'Time'             => $this->getFileModifiedTimestampOfFile(PHP_BINARY, 'l, d F Y H:i:s'),
-            'Time as PHP no.'  => $this->getFileModifiedTimestampOfFile(PHP_BINARY, 'PHPtime'),
-            'Type'             => 'scripting language',
-            'Url'              => 'https://github.com/php/php-src',
-            'Vendor'           => 'The PHP Group',
-            'Version'          => PHP_VERSION,
-            'Version no.'      => PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION . '.' . PHP_RELEASE_VERSION,
+            'Homepage'        => 'https://secure.php.net/',
+            'License'         => 'PHP License v3.01',
+            'Package Name'    => 'ZendEngine/PHP',
+            'Product'         => 'PHP',
+            'Time'            => $this->getFileModifiedTimestampOfFile(PHP_BINARY, 'l, d F Y H:i:s'),
+            'Time as PHP no.' => $this->getFileModifiedTimestampOfFile(PHP_BINARY, 'PHPtime'),
+            'Type'            => 'scripting language',
+            'Url'             => 'https://github.com/php/php-src',
+            'Vendor'          => 'The PHP Group',
+            'Version'         => PHP_VERSION,
+            'Version no.'     => PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION . '.' . PHP_RELEASE_VERSION,
         ];
+        if ($skipAging) {
+            unset($aReturn['Aging']);
+        }
+        return $aReturn;
     }
 
     /**
@@ -128,7 +130,7 @@ trait ComposerPackagesListing
      * @param string $fileToRead
      * @return array
      */
-    protected function getPackageDetailsFromGivenComposerLockFile($fileToRead, $devInstead = false)
+    protected function getPackageDetailsFromGivenComposerLockFile($fileToRead, $devInstead = false, $skipAging = false)
     {
         if (!file_exists($fileToRead)) {
             return ['error' => $fileToRead . ' was not found'];
@@ -141,6 +143,9 @@ trait ComposerPackagesListing
             $basic                 = $this->getPkgBasicInfo($value, $dNA);
             $vrs                   = $this->getPkgVersion($value, $dNA);
             $alnfo[$value['name']] = array_merge($atr, $basic, $vrs, $this->getPkgTiming($value, $dNA));
+            if ($skipAging) {
+                unset($alnfo[$value['name']]['Aging']);
+            }
             ksort($alnfo[$value['name']]);
         }
         ksort($alnfo);
