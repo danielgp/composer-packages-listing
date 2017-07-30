@@ -80,6 +80,7 @@ trait ComposerPackagesListing
     {
         $aReturn = [
             'Aging'           => $this->getPkgAging($this->getFileModifiedTimestampOfFile(PHP_BINARY, 'PHPtime')),
+            'Architecture'    => (PHP_INT_SIZE === 4 ? 'x86 (32 bit)' : 'x64 (64 bit)'),
             'Description'     => 'PHP is a popular general-purpose scripting language'
             . ' that is especially suited to web development',
             'Homepage'        => 'https://secure.php.net/',
