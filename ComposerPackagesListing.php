@@ -42,8 +42,7 @@ trait ComposerPackagesListing
      * @param boolean $devInstead
      * @return string
      */
-    private function decisionPackageOrPackageDev($devInstead)
-    {
+    private function decisionPackageOrPackageDev($devInstead) {
         $sReturn = 'packages';
         if ($devInstead) {
             $sReturn = 'packages-dev';
@@ -56,8 +55,7 @@ trait ComposerPackagesListing
      *
      * @return array
      */
-    protected function exposeEnvironmentDetails()
-    {
+    protected function exposeEnvironmentDetails() {
         $knownValues = [
             'AMD64' => 'x64 (64 bit)',
             'i386'  => 'x86 (32 bit)',
@@ -76,10 +74,9 @@ trait ComposerPackagesListing
      *
      * @return array
      */
-    protected function exposePhpDetails($skipAging = false)
-    {
+    protected function exposePhpDetails($skipAging = false) {
         $aReturn = [
-            'Aging'           => $this->getPkgAging($this->getFileModifiedTimestampOfFile(PHP_BINARY, 'PHPtime')),
+            'Aging'           => $this->getPkgAging($this->getFileModifiedTimestampOfFile(PHP_BINARY, 'Y-m-d')),
             'Architecture'    => (PHP_INT_SIZE === 4 ? 'x86 (32 bit)' : 'x64 (64 bit)'),
             'Description'     => 'PHP is a popular general-purpose scripting language'
             . ' that is especially suited to web development',
@@ -109,8 +106,7 @@ trait ComposerPackagesListing
      * @param boolean $resultInUtc
      * @return string
      */
-    protected function getFileModifiedTimestampOfFile($fileName, $format = 'Y-m-d H:i:s', $resultInUtc = false)
-    {
+    protected function getFileModifiedTimestampOfFile($fileName, $format = 'Y-m-d H:i:s', $resultInUtc = false) {
         if (!file_exists($fileName)) {
             return ['error' => $fileName . ' was not found'];
         }
@@ -131,8 +127,7 @@ trait ComposerPackagesListing
      * @param string $fileToRead
      * @return array
      */
-    protected function getPackageDetailsFromGivenComposerLockFile($fileToRead, $devInstead = false, $skipAging = false)
-    {
+    protected function getPackageDetailsFromGivenComposerLockFile($fileToRead, $devInstead = false, $skipAging = false) {
         if (!file_exists($fileToRead)) {
             return ['error' => $fileToRead . ' was not found'];
         }
@@ -153,16 +148,14 @@ trait ComposerPackagesListing
         return $alnfo;
     }
 
-    private function getPkgAging($timePkg)
-    {
+    private function getPkgAging($timePkg) {
         $dateTimeToday = new \DateTime(date('Y-m-d', strtotime('today')));
         $dateTime      = new \DateTime(date('Y-m-d', strtotime($timePkg)));
         $interval      = $dateTimeToday->diff($dateTime);
         return $interval->format('%a days ago');
     }
 
-    private function getPkgBasicInfo($value, $defaultNA)
-    {
+    private function getPkgBasicInfo($value, $defaultNA) {
         return [
             'License'      => (isset($value['license']) ? $this->getPkgLcns($value['license']) : $defaultNA),
             'Package Name' => $value['name'],
@@ -172,16 +165,14 @@ trait ComposerPackagesListing
         ];
     }
 
-    private function getPkgFileInListOfPackageArrayOut($fileToRead)
-    {
+    private function getPkgFileInListOfPackageArrayOut($fileToRead) {
         $handle       = fopen($fileToRead, 'r');
         $fileContents = fread($handle, filesize($fileToRead));
         fclose($handle);
         return json_decode($fileContents, true);
     }
 
-    private function getPkgLcns($license)
-    {
+    private function getPkgLcns($license) {
         $lcns = $license;
         if (is_array($license)) {
             $lcns = implode(', ', $license);
@@ -189,8 +180,7 @@ trait ComposerPackagesListing
         return $lcns;
     }
 
-    private function getPkgOptAtributeAll($value, $defaultNA)
-    {
+    private function getPkgOptAtributeAll($value, $defaultNA) {
         $attr    = ['description', 'homepage', 'type', 'url', 'version'];
         $aReturn = [];
         foreach ($attr as $valueA) {
@@ -202,8 +192,7 @@ trait ComposerPackagesListing
         return $aReturn;
     }
 
-    private function getPkgTiming($value, $defaultNA)
-    {
+    private function getPkgTiming($value, $defaultNA) {
         if (isset($value['time'])) {
             return [
                 'Aging'           => $this->getPkgAging($value['time']),
@@ -214,8 +203,7 @@ trait ComposerPackagesListing
         return ['Aging' => $defaultNA, 'Time' => $defaultNA, 'Time as PHP no.' => $defaultNA];
     }
 
-    private function getPkgVerNo($version)
-    {
+    private function getPkgVerNo($version) {
         $vrs = $version;
         if (substr($version, 0, 1) == 'v') {
             $vrs = substr($version, 1, strlen($version) - 1);
@@ -226,8 +214,7 @@ trait ComposerPackagesListing
         return $vrs;
     }
 
-    private function getPkgVersion($value, $defaultNA)
-    {
+    private function getPkgVersion($value, $defaultNA) {
         if (isset($value['version'])) {
             return [
                 'Notification URL' => $value['notification-url'],
@@ -236,4 +223,5 @@ trait ComposerPackagesListing
         }
         return ['Notification URL' => $defaultNA, 'Version no.' => $defaultNA];
     }
+
 }
