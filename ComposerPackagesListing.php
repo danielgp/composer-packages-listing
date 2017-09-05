@@ -158,8 +158,7 @@ trait ComposerPackagesListing
             $atr      = $this->mergeMultipleArrays($value, $inParametersArray);
             $keyToUse = $value['name'];
             if (array_key_exists('Not Grouped By Name', $inParametersArray)) {
-                $keyToUse    = $key;
-                $atr['Name'] = $value['name'];
+                $keyToUse = $key;
             }
             $alnfo[$keyToUse] = $atr;
             ksort($alnfo[$keyToUse]);
