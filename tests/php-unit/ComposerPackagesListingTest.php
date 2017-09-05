@@ -32,16 +32,15 @@ class ComposerPackagesListingTest extends \PHPUnit\Framework\TestCase
 
     use ComposerPackagesListing;
 
-    public function testGetPackageDetailsFromGivenComposerLockFile()
-    {
-        $fileToCheck = str_replace('tests' . DIRECTORY_SEPARATOR . 'php-unit', '', realpath(__DIR__)) . 'composer.lock';
+    public function testGetPackageDetailsFromGivenComposerLockFile() {
+        $fileToCheck = str_replace('tests'.DIRECTORY_SEPARATOR.'php-unit', '', realpath(__DIR__)).'composer.lock';
         $actual      = $this->getPackageDetailsFromGivenComposerLockFile($fileToCheck, true);
         $this->assertArrayHasKey('Aging', $actual['phpunit/phpunit']);
     }
 
-    public function testGetPackageDetailsFromGivenComposerLockFileError()
-    {
+    public function testGetPackageDetailsFromGivenComposerLockFileError() {
         $actual = $this->getPackageDetailsFromGivenComposerLockFile('composer.not');
         $this->assertArrayHasKey('error', $actual);
     }
+
 }
