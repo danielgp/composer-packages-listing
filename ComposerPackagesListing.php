@@ -37,20 +37,6 @@ trait ComposerPackagesListing
 {
 
     /**
-     * Decision between Main or Development packages
-     *
-     * @param array $inParametersArray
-     * @return string
-     */
-    private function decisionPackageOrPackageDevEnhanced($inParametersArray) {
-        $sReturn = 'packages';
-        if (array_key_exists('Dev', $inParametersArray)) {
-            $sReturn = 'packages-dev';
-        }
-        return $sReturn;
-    }
-
-    /**
      * Exposes few Environment details
      *
      * @return array
@@ -154,7 +140,11 @@ trait ComposerPackagesListing
         }
         $alnfo    = [];
         $packages = $this->getPkgFileInListOfPackageArrayOut($fileIn);
-        foreach ($packages[$this->decisionPackageOrPackageDevEnhanced($inParametersArray)] as $key => $value) {
+        $pkgType  = 'packages';
+        if (array_key_exists('Dev', $inParametersArray)) {
+            $pkgType = 'packages-dev';
+        }
+        foreach ($packages[$pkgType] as $key => $value) {
             $atr      = $this->mergeMultipleArrays($value, $inParametersArray);
             $keyToUse = $value['name'];
             if (array_key_exists('Not Grouped By Name', $inParametersArray)) {
@@ -165,14 +155,6 @@ trait ComposerPackagesListing
         }
         ksort($alnfo);
         return $alnfo;
-    }
-
-    private function mergeMultipleArrays($value, $inParametersArray) {
-        $atr   = $this->getPkgOptAtributeAll($value, '---');
-        $basic = $this->getPkgBasicInfo($value, '---');
-        $vrs   = $this->getPkgVersion($value, '---');
-        $tmng  = $this->getPkgTimingEnhanced($value, '---', $inParametersArray);
-        return array_merge($atr, $basic, $vrs, $tmng);
     }
 
     private function getPkgAging($timePkg) {
@@ -230,14 +212,6 @@ trait ComposerPackagesListing
         return ['Aging' => $defaultNA, 'Time' => $defaultNA, 'Time as PHP no.' => $defaultNA];
     }
 
-    private function getPkgTimingEnhanced($value, $defaultNA, $inParametersArray) {
-        $aReturn = $this->getPkgTiming($value, $defaultNA);
-        if (array_key_exists('Skip Aging', $inParametersArray)) {
-            unset($aReturn['Aging']);
-        }
-        return $aReturn;
-    }
-
     private function getPkgVerNo($version) {
         $vrs = $version;
         if (substr($version, 0, 1) == 'v') {
@@ -257,6 +231,17 @@ trait ComposerPackagesListing
             ];
         }
         return ['Notification URL' => $defaultNA, 'Version no.' => $defaultNA];
+    }
+
+    private function mergeMultipleArrays($value, $inParametersArray) {
+        $atr   = $this->getPkgOptAtributeAll($value, '---');
+        $basic = $this->getPkgBasicInfo($value, '---');
+        $vrs   = $this->getPkgVersion($value, '---');
+        $tmng  = $this->getPkgTiming($value, '---');
+        if (array_key_exists('Skip Aging', $inParametersArray)) {
+            unset($tmng['Aging']);
+        }
+        return array_merge($atr, $basic, $vrs, $tmng);
     }
 
 }
