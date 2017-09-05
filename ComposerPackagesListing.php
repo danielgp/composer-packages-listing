@@ -37,6 +37,20 @@ trait ComposerPackagesListing
 {
 
     /**
+     * Decision between Main or Development packages
+     *
+     * @param array $inParametersArray
+     * @return string
+     */
+    private function decisionPackageOrPackageDev($inParametersArray) {
+        $sReturn = 'packages';
+        if (array_key_exists('Dev', $inParametersArray)) {
+            $sReturn = 'packages-dev';
+        }
+        return $sReturn;
+    }
+
+    /**
      * Exposes few Environment details
      *
      * @return array
@@ -140,17 +154,13 @@ trait ComposerPackagesListing
         }
         $alnfo    = [];
         $packages = $this->getPkgFileInListOfPackageArrayOut($fileIn);
-        $pkgType  = 'packages';
-        if (array_key_exists('Dev', $inParametersArray)) {
-            $pkgType = 'packages-dev';
-        }
+        $pkgType  = $this->decisionPackageOrPackageDev($inParametersArray);
         foreach ($packages[$pkgType] as $key => $value) {
-            $atr      = $this->mergeMultipleArrays($value, $inParametersArray);
             $keyToUse = $value['name'];
             if (array_key_exists('Not Grouped By Name', $inParametersArray)) {
                 $keyToUse = $key;
             }
-            $alnfo[$keyToUse] = $atr;
+            $alnfo[$keyToUse] = $this->mergeMultipleArrays($value, $inParametersArray);
             ksort($alnfo[$keyToUse]);
         }
         ksort($alnfo);
