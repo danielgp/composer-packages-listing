@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="" tests="2" assertions="2" failures="0" errors="0" time="0.010300">
-    <testsuite name="danielgp\composer_packages_listing\ComposerPackagesListingTest" file="C:\www\Data\GitRepositories\GitHub\danielgp\composer-packages-listing\tests\php-unit\ComposerPackagesListingTest.php" tests="2" assertions="2" failures="0" errors="0" time="0.010300">
-      <testcase name="testGetPackageDetailsFromGivenComposerLockFile" class="danielgp\composer_packages_listing\ComposerPackagesListingTest" file="C:\www\Data\GitRepositories\GitHub\danielgp\composer-packages-listing\tests\php-unit\ComposerPackagesListingTest.php" line="35" assertions="1" time="0.009318"/>
-      <testcase name="testGetPackageDetailsFromGivenComposerLockFileError" class="danielgp\composer_packages_listing\ComposerPackagesListingTest" file="C:\www\Data\GitRepositories\GitHub\danielgp\composer-packages-listing\tests\php-unit\ComposerPackagesListingTest.php" line="42" assertions="1" time="0.000982"/>
+  <testsuite name="" tests="2" assertions="2" failures="0" errors="0" time="0.012870">
+    <testsuite name="danielgp\composer_packages_listing\ComposerPackagesListingTest" file="C:\www\Data\GitRepositories\GitHub\danielgp\composer-packages-listing\tests\php-unit\ComposerPackagesListingTest.php" tests="2" assertions="2" failures="0" errors="0" time="0.012870">
+      <testcase name="testGetPackageDetailsFromGivenComposerLockFile" class="danielgp\composer_packages_listing\ComposerPackagesListingTest" file="C:\www\Data\GitRepositories\GitHub\danielgp\composer-packages-listing\tests\php-unit\ComposerPackagesListingTest.php" line="35" assertions="1" time="0.012024"/>
+      <testcase name="testGetPackageDetailsFromGivenComposerLockFileError" class="danielgp\composer_packages_listing\ComposerPackagesListingTest" file="C:\www\Data\GitRepositories\GitHub\danielgp\composer-packages-listing\tests\php-unit\ComposerPackagesListingTest.php" line="42" assertions="1" time="0.000846"/>
     </testsuite>
   </testsuite>
 </testsuites>

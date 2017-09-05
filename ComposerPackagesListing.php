@@ -39,12 +39,12 @@ trait ComposerPackagesListing
     /**
      * Decision between Main or Development packages
      *
-     * @param boolean $devInstead
+     * @param array $inParametersArray
      * @return string
      */
-    private function decisionPackageOrPackageDev($devInstead) {
+    private function decisionPackageOrPackageDevEnhanced($inParametersArray) {
         $sReturn = 'packages';
-        if ($devInstead) {
+        if (array_key_exists('Dev', $inParametersArray)) {
             $sReturn = 'packages-dev';
         }
         return $sReturn;
@@ -123,29 +123,57 @@ trait ComposerPackagesListing
 
     /**
      * Returns a complete list of packages and respective details from a composer.lock file
+     * (kept for compatibility reason)
      *
-     * @param string $fileToRead
+     * @param string $fileIn
+     * @param boolean $devInstead true for Development, false for Production
+     * @param boolean $skipAging true for skipping, false for not
      * @return array
      */
-    protected function getPackageDetailsFromGivenComposerLockFile($fileToRead, $devInstead = false, $skipAging = false) {
-        if (!file_exists($fileToRead)) {
-            return ['error' => $fileToRead . ' was not found'];
+    protected function getPackageDetailsFromGivenComposerLockFile($fileIn, $devInstead = false, $skipAging = false) {
+        $inParametersArray = [];
+        if ($devInstead) {
+            $inParametersArray['Dev'] = true;
         }
-        $dNA      = '---';
+        if ($skipAging) {
+            $inParametersArray['Skip Aging'] = true;
+        }
+        return $this->getPackageDetailsFromGivenComposerLockFileEnhanced($fileIn, $inParametersArray);
+    }
+
+    /**
+     * Returns a complete list of packages and respective details from a composer.lock file
+     *
+     * @param string $fileIn
+     * @param array $inParametersArray
+     * @return array
+     */
+    protected function getPackageDetailsFromGivenComposerLockFileEnhanced($fileIn, $inParametersArray = []) {
+        if (!file_exists($fileIn)) {
+            return ['error' => $fileIn . ' was not found'];
+        }
         $alnfo    = [];
-        $packages = $this->getPkgFileInListOfPackageArrayOut($fileToRead);
-        foreach ($packages[$this->decisionPackageOrPackageDev($devInstead)] as $value) {
-            $atr                   = $this->getPkgOptAtributeAll($value, $dNA);
-            $basic                 = $this->getPkgBasicInfo($value, $dNA);
-            $vrs                   = $this->getPkgVersion($value, $dNA);
-            $alnfo[$value['name']] = array_merge($atr, $basic, $vrs, $this->getPkgTiming($value, $dNA));
-            if ($skipAging) {
-                unset($alnfo[$value['name']]['Aging']);
+        $packages = $this->getPkgFileInListOfPackageArrayOut($fileIn);
+        foreach ($packages[$this->decisionPackageOrPackageDevEnhanced($inParametersArray)] as $key => $value) {
+            $atr      = $this->mergeMultipleArrays($value, $inParametersArray);
+            $keyToUse = $value['name'];
+            if (array_key_exists('Not Grouped By Name', $inParametersArray)) {
+                $keyToUse    = $key;
+                $atr['Name'] = $value['name'];
             }
-            ksort($alnfo[$value['name']]);
+            $alnfo[$keyToUse] = $atr;
+            ksort($alnfo[$keyToUse]);
         }
         ksort($alnfo);
         return $alnfo;
+    }
+
+    private function mergeMultipleArrays($value, $inParametersArray) {
+        $atr   = $this->getPkgOptAtributeAll($value, '---');
+        $basic = $this->getPkgBasicInfo($value, '---');
+        $vrs   = $this->getPkgVersion($value, '---');
+        $tmng  = $this->getPkgTimingEnhanced($value, '---', $inParametersArray);
+        return array_merge($atr, $basic, $vrs, $tmng);
     }
 
     private function getPkgAging($timePkg) {
@@ -201,6 +229,14 @@ trait ComposerPackagesListing
             ];
         }
         return ['Aging' => $defaultNA, 'Time' => $defaultNA, 'Time as PHP no.' => $defaultNA];
+    }
+
+    private function getPkgTimingEnhanced($value, $defaultNA, $inParametersArray) {
+        $aReturn = $this->getPkgTiming($value, $defaultNA);
+        if (array_key_exists('Skip Aging', $inParametersArray)) {
+            unset($aReturn['Aging']);
+        }
+        return $aReturn;
     }
 
     private function getPkgVerNo($version) {
