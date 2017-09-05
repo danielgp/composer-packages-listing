@@ -19,6 +19,7 @@
     },
     "autoload": {
         "classmap": [
+            "Basics.php",
             "ComposerPackagesListing.php"
         ]
     },
