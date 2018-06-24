@@ -4,7 +4,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2017 Daniel Popiniuc
+ * Copyright (c) 2017 - 2018 Daniel Popiniuc
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -74,6 +74,7 @@ trait Basics
                 'Aging'           => $this->getPkgAging($value['time']),
                 'Time'            => date('l, d F Y H:i:s', strtotime($value['time'])),
                 'Time as PHP no.' => strtotime($value['time']),
+                'Time as SQL'     => date('Y-m-d H:i:s', strtotime($value['time'])),
             ];
         }
         return ['Aging' => $defaultNA, 'Time' => $defaultNA, 'Time as PHP no.' => $defaultNA];
