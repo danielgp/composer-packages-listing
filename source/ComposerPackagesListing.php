@@ -44,7 +44,8 @@ trait ComposerPackagesListing
      * @param array $inParametersArray
      * @return string
      */
-    private function decisionPackageOrPackageDev($inParametersArray) {
+    private function decisionPackageOrPackageDev($inParametersArray)
+    {
         $sReturn = 'packages';
         if (array_key_exists('Dev', $inParametersArray)) {
             $sReturn = 'packages-dev';
@@ -57,7 +58,8 @@ trait ComposerPackagesListing
      *
      * @return array
      */
-    protected function exposeEnvironmentDetails() {
+    protected function exposeEnvironmentDetails()
+    {
         $knownValues = [
             'AMD64' => 'x64 (64 bit)',
             'i386'  => 'x86 (32 bit)',
@@ -76,7 +78,8 @@ trait ComposerPackagesListing
      *
      * @return array
      */
-    protected function exposePhpDetails($skipAging = false) {
+    protected function exposePhpDetails($skipAging = false)
+    {
         $aReturn = [
             'Aging'           => $this->getPkgAging($this->getFileModifiedTimestampOfFile(PHP_BINARY, 'Y-m-d')),
             'Architecture'    => (PHP_INT_SIZE === 4 ? 'x86 (32 bit)' : 'x64 (64 bit)'),
@@ -109,7 +112,8 @@ trait ComposerPackagesListing
      * @param boolean $resultInUtc
      * @return string
      */
-    protected function getFileModifiedTimestampOfFile($fileName, $format = 'Y-m-d H:i:s', $resultInUtc = false) {
+    protected function getFileModifiedTimestampOfFile($fileName, $format = 'Y-m-d H:i:s', $resultInUtc = false)
+    {
         if (!file_exists($fileName)) {
             return ['error' => $fileName . ' was not found'];
         }
@@ -133,7 +137,8 @@ trait ComposerPackagesListing
      * @param boolean $skipAging true for skipping, false for not
      * @return array
      */
-    protected function getPackageDetailsFromGivenComposerLockFile($fileIn, $devInstead = false, $skipAging = false) {
+    protected function getPackageDetailsFromGivenComposerLockFile($fileIn, $devInstead = false, $skipAging = false)
+    {
         $inParametersArray = [];
         if ($devInstead) {
             $inParametersArray['Dev'] = true;
@@ -151,7 +156,8 @@ trait ComposerPackagesListing
      * @param array $inParametersArray
      * @return array
      */
-    protected function getPackageDetailsFromGivenComposerLockFileEnhanced($fileIn, $inParametersArray = []) {
+    protected function getPackageDetailsFromGivenComposerLockFileEnhanced($fileIn, $inParametersArray = [])
+    {
         if (!file_exists($fileIn)) {
             return ['error' => $fileIn . ' was not found'];
         }
@@ -170,14 +176,16 @@ trait ComposerPackagesListing
         return $alnfo;
     }
 
-    private function getPkgFileInListOfPackageArrayOut($fileToRead) {
+    private function getPkgFileInListOfPackageArrayOut($fileToRead)
+    {
         $handle       = fopen($fileToRead, 'r');
         $fileContents = fread($handle, filesize($fileToRead));
         fclose($handle);
         return json_decode($fileContents, true);
     }
 
-    private function mergePackageAttributes($value, $inParametersArray) {
+    private function mergePackageAttributes($value, $inParametersArray)
+    {
         $atr   = $this->getPkgOptAtributeAll($value, '---');
         $basic = $this->getPkgBasicInfo($value, '---');
         $vrs   = $this->getPkgVersion($value, '---');
@@ -187,5 +195,4 @@ trait ComposerPackagesListing
         }
         return array_merge($atr, $basic, $vrs, $tmng);
     }
-
 }

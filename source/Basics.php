@@ -31,14 +31,16 @@ namespace danielgp\composer_packages_listing;
 trait Basics
 {
 
-    protected function getPkgAging($timePkg) {
+    protected function getPkgAging($timePkg)
+    {
         $dateTimeToday = new \DateTime(date('Y-m-d', strtotime('today')));
         $dateTime      = new \DateTime(date('Y-m-d', strtotime($timePkg)));
         $interval      = $dateTimeToday->diff($dateTime);
         return $interval->format('%a days ago');
     }
 
-    private function getPkgBasicInfo($value, $defaultNA) {
+    private function getPkgBasicInfo($value, $defaultNA)
+    {
         return [
             'License'      => (isset($value['license']) ? $this->getPkgLcns($value['license']) : $defaultNA),
             'Package Name' => $value['name'],
@@ -48,7 +50,8 @@ trait Basics
         ];
     }
 
-    private function getPkgLcns($license) {
+    private function getPkgLcns($license)
+    {
         $lcns = $license;
         if (is_array($license)) {
             $lcns = implode(', ', $license);
@@ -56,7 +59,8 @@ trait Basics
         return $lcns;
     }
 
-    private function getPkgOptAtributeAll($value, $defaultNA) {
+    private function getPkgOptAtributeAll($value, $defaultNA)
+    {
         $attr    = ['description', 'homepage', 'type', 'url', 'version'];
         $aReturn = [];
         foreach ($attr as $valueA) {
@@ -68,7 +72,8 @@ trait Basics
         return $aReturn;
     }
 
-    protected function getPkgTiming($value, $defaultNA) {
+    protected function getPkgTiming($value, $defaultNA)
+    {
         if (isset($value['time'])) {
             return [
                 'Aging'           => $this->getPkgAging($value['time']),
@@ -80,7 +85,8 @@ trait Basics
         return ['Aging' => $defaultNA, 'Time' => $defaultNA, 'Time as PHP no.' => $defaultNA];
     }
 
-    private function getPkgVerNo($version) {
+    private function getPkgVerNo($version)
+    {
         $vrs = $version;
         if (substr($version, 0, 1) == 'v') {
             $vrs = substr($version, 1, strlen($version) - 1);
@@ -91,7 +97,8 @@ trait Basics
         return $vrs;
     }
 
-    protected function getPkgVersion($value, $defaultNA) {
+    protected function getPkgVersion($value, $defaultNA)
+    {
         if (isset($value['version'])) {
             return [
                 'Notification URL' => $value['notification-url'],
@@ -100,5 +107,4 @@ trait Basics
         }
         return ['Notification URL' => $defaultNA, 'Version no.' => $defaultNA];
     }
-
 }
