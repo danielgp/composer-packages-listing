@@ -24,7 +24,7 @@ THE SOFTWARE.
 -->
 <phpunit
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/7.2/phpunit.xsd"
+    xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/8.2/phpunit.xsd"
     backupGlobals="true"
     backupStaticAttributes="false"
     beStrictAboutChangesToGlobalState="false"
@@ -59,11 +59,11 @@ THE SOFTWARE.
         </whitelist>
     </filter>
     <logging>
-        <log type="coverage-html" target="tests/php-unit/coverage.html"/>
-        <log type="coverage-clover" target="tests/php-unit/coverage-clover.xml"/>
-        <log type="json" target="tests/php-unit/coverage.json"/>
-        <log type="junit" target="tests/php-unit/junit.xml"/>
-        <log type="testdox-html" target="tests/php-unit/testdox.html"/>
-        <log type="testdox-text" target="tests/php-unit/testdox.txt"/>
+        <log type="coverage-html" target="results/php-unit/coverage.html"/>
+        <log type="coverage-clover" target="results/php-unit/coverage-clover.xml" />
+        <log type="coverage-php" target="results/php-unit/coverage-serialized.php" />
+        <log type="junit" target="results/php-unit/junit.xml"/>
+        <log type="testdox-html" target="results/php-unit/testdox.html"/>
+        <log type="testdox-text" target="results/php-unit/testdox.txt"/>\
     </logging>
 </phpunit>
