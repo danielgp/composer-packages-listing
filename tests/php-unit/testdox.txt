@@ -1,4 +1,0 @@
-danielgp\composer_packages_listing\ComposerPackagesListing
- [x] Get package details from given composer lock file
- [x] Get package details from given composer lock file error
-
