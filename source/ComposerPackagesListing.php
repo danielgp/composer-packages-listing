@@ -137,7 +137,7 @@ trait ComposerPackagesListing
      * @param boolean $skipAging true for skipping, false for not
      * @return array
      */
-    protected function getPackageDetailsFromGivenComposerLockFile($fileIn, $devInstead = false, $skipAging = false)
+    public function getPackageDetailsFromGivenComposerLockFile($fileIn, $devInstead = false, $skipAging = false)
     {
         $inParametersArray = [];
         if ($devInstead) {

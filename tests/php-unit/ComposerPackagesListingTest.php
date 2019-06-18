@@ -1,7 +1,5 @@
 <?php
 
-namespace danielgp\composer_packages_listing;
-
 /**
  *
  * The MIT License (MIT)
@@ -27,20 +25,32 @@ namespace danielgp\composer_packages_listing;
  * SOFTWARE.
  *
  */
+
+namespace danielgp\composer_packages_listing;
+
 class ComposerPackagesListingTest extends \PHPUnit\Framework\TestCase
 {
 
-    use ComposerPackagesListing;
+    protected function setUp(): void
+    {
+        require_once str_replace('tests' . DIRECTORY_SEPARATOR . 'php-unit', 'source', __DIR__)
+                . DIRECTORY_SEPARATOR . 'Basics.php';
+        require_once str_replace('tests' . DIRECTORY_SEPARATOR . 'php-unit', 'source', __DIR__)
+                . DIRECTORY_SEPARATOR . 'ComposerPackagesListing.php';
+    }
 
-    public function testGetPackageDetailsFromGivenComposerLockFile() {
-        $fileToCheck = str_replace('tests'.DIRECTORY_SEPARATOR.'php-unit', '', realpath(__DIR__)).'composer.lock';
-        $actual      = $this->getPackageDetailsFromGivenComposerLockFile($fileToCheck, true);
+    public function testGetPackageDetailsFromGivenComposerLockFile()
+    {
+        $mock        = $this->getMockForTrait(ComposerPackagesListing::class);
+        $fileToCheck = str_replace('tests' . DIRECTORY_SEPARATOR . 'php-unit', '', realpath(__DIR__)) . 'composer.lock';
+        $actual      = $mock->getPackageDetailsFromGivenComposerLockFile($fileToCheck, true);
         $this->assertArrayHasKey('Aging', $actual['phpunit/phpunit']);
     }
 
-    public function testGetPackageDetailsFromGivenComposerLockFileError() {
-        $actual = $this->getPackageDetailsFromGivenComposerLockFile('composer.not');
+    public function testGetPackageDetailsFromGivenComposerLockFileError()
+    {
+        $mock   = $this->getMockForTrait(ComposerPackagesListing::class);
+        $actual = $mock->getPackageDetailsFromGivenComposerLockFile('composer.not');
         $this->assertArrayHasKey('error', $actual);
     }
-
 }
