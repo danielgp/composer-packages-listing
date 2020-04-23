@@ -31,7 +31,7 @@ namespace danielgp\composer_packages_listing;
 class ComposerPackagesListingTest extends \PHPUnit\Framework\TestCase
 {
 
-    protected function setUp(): void
+    public static function setUpBeforeClass()
     {
         require_once str_replace('tests' . DIRECTORY_SEPARATOR . 'php-unit', 'source', __DIR__)
                 . DIRECTORY_SEPARATOR . 'Basics.php';
