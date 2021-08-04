@@ -11,14 +11,14 @@
         }
     ],
     "require": {
-        "php": "^7.2 || ^7.3 || ^7.4"
+        "php": "^7.2 || ^7.3 || ^7.4 || ^8.0"
     },
     "require-dev": {
-        "dealerdirect/phpcodesniffer-composer-installer": "~0.4",
-        "phpunit/phpunit": "^7.2",
-        "phpunit/php-code-coverage": "^6",
-        "squizlabs/php_codesniffer": "^3.3",
-        "wimg/php-compatibility": "~8.1"
+        "dealerdirect/phpcodesniffer-composer-installer": "~0.7",
+        "phpunit/phpunit": "^9",
+        "phpunit/php-code-coverage": "^9",
+        "squizlabs/php_codesniffer": "^3",
+        "phpcompatibility/php-compatibility": "^9"
     },
     "autoload": {
         "classmap": [
